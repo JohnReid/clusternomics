@@ -30,19 +30,31 @@ ed.set_seed(42)
 M = 100  # batch size during training
 d = 2  # latent dimension
 
+#
 # Probability model (subgraph)
+#
+# z is standard normal
 z = Normal(mu=tf.zeros([M, d]), sigma=tf.ones([M, d]))
-type(z)
+# one hidden layer of size 256 that takes z as input
 hidden = Dense(256, activation='relu')(z.value())
+# Each pixel has a Bernoulli likelihood
 x = Bernoulli(logits=Dense(28 * 28)(hidden))
 
+#
 # Variational model (subgraph)
+#
+# Placeholder for the data
 x_ph = tf.placeholder(tf.float32, [M, 28 * 28])
+# Again one hidden layer of size 256
 hidden = Dense(256, activation='relu')(x_ph)
+# The variational distribution over z is multivariate normal (d dimensions)
 qz = Normal(mu=Dense(d)(hidden),
             sigma=Dense(d, activation='softplus')(hidden))
 
-mnist = input_data.read_data_sets("data/mnist", one_hot=True)
+#
+# Load the data
+#
+mnist = input_data.read_data_sets(DATA_DIR, one_hot=True)
 
 sess = ed.get_session()
 K.set_session(sess)
@@ -79,4 +91,4 @@ for epoch in range(n_epoch):
     # Prior predictive check.
     imgs = sess.run(x.value())
     for m in range(M):
-        imsave("%s/%d.png" % IMG_DIR, m, imgs[m].reshape(28, 28))
+        imsave("%s/%d.png" % (IMG_DIR, m), imgs[m].reshape(28, 28))

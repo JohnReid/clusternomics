@@ -6,3 +6,4 @@ pyqt5
 keras
 progressbar2
 pillow
+# prettytensor
