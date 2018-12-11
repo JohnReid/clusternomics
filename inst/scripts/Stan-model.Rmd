@@ -1,0 +1,38 @@
+---
+title: "Stan implementation of Clusternomics model"
+output: html_document
+---
+
+```{r include = FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+```{r eval = FALSE}
+rmarkdown::render('Stan-model.Rmd')
+```
+
+```{r message = FALSE, warning = FALSE}
+suppressPackageStartupMessages({
+  library(rstan)
+})
+```
+
+This document demonstrates how to implement the Clusternomics model in Stan.
+
+
+## Data
+
+We use the [breast cancer](https://s3-eu-west-1.amazonaws.com/eg-cu/tcga/Breast-TCGA.zip) data from TCGA.
+```{r loadData}
+load('../data/Breast-TCGA/Breast.RData')
+class(X)
+names(X)
+length(X)
+lapply(X, dim)
+X
+```
+
+## Model
+
+```{r stanModel}
+```
